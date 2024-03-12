@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+    <link rel="stylesheet" href="/home.css" />
+  </head>
+  <body>
+    <div class="main-container">
+      <div class="header1">
+        <p>Home</p>
+        <p class="list">Employee List</p>
+        <p><%= empName %></p>
+        <p><a class="link" href="/">Logout</a></p>
+      </div>
+      <div class="result">
+        <h1>Welcome to Admin Panel</h1>
+        <button class="create">Create Employee</button>
+      </div>
+    </div>
+
+    <script>
+      const create = document.querySelector(".create");
+      const result = document.querySelector(".result");
+      const employeeList = document.querySelector(".list");
+
+
+      function created() {
+        result.innerHTML = "";
+        const display = document.createElement("div");
+        display.classList.add("createEmployee");
+        display.innerHTML = `
+           <h2>Create Employee</h2>
+        <form action="/employee" method="post">
+          <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" placeholder="Name" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="Email" required>
+          </div>
+          <div class="form-group">
+            <label for="phone">Mobile No:</label>
+            <input type="tel" id="phone" name="phone" placeholder="Mobile No" pattern="[0-9]{10}" required>
+          </div>
+          <div class="form-group">
+            <label for="designation">Designation:</label>
+            <select name="designation" id="designation">
+               <option value="HR">HR</option>
+               <option value="Manager">Manager</option>
+               <option value="Sales">Sales</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="gender">Gender:</label>
+            <input type="radio" name="gender" value="male">Male
+            <input type="radio" name="gender" value="fmale">Female
+          </div>
+
+          <div class="form-group">
+            <label for="Course">Course:</label>
+            <input type="checkbox" id="MCA" name="course" value="MCA">    
+                 <label>MCA</label> 
+            <input type="checkbox" id="BCA" name="course" value="BCA">    
+                 <label>BCA</label> 
+            <input type="checkbox" id="BSC" name="course" value="BSC">    
+                 <label>BSC</label> 
+          </div>
+          
+          <button type="submit" class="submit-btn">Submit</button>
+        </form>
+           `;
+
+           result.appendChild(display);
+      };
+      create.addEventListener("click",(event) =>{
+        event.preventDefault();
+        created();
+      });
+    async function list(){
+        result.innerHTML = "";
+        const response = await fetch("http://localhost:5000/employees");
+        const users = await response.json();
+        const table = document.createElement('table');
+        const thead = document.createElement('thead');
+        const tbody = document.createElement('tbody');
+        var count = Object.keys(users).length;
+
+        const details = document.createElement("div");
+        details.classList.add("details");
+        details.innerHTML= `
+        <div>Employee List</div>
+        <div>Total Count:${count}</div>
+        <div class="group">
+        <label for="search">Search</label>
+            <input type="text" id="search" name="search" placeholder="">
+        </div>
+        <button onclick="created()"">Create Employee</button>
+        `
+        result.appendChild(details);
+        const headers = ['_ID', 'Name', 'Email', 'Phone', 'Designation', 'Gender', 'Course', 'Action'];
+    const headerRow = document.createElement('tr');
+    headers.forEach(headerText => {
+        const th = document.createElement('th');
+        th.textContent = headerText;
+        headerRow.appendChild(th);
+    });
+    
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
+
+    // Create table rows and cells
+    users.forEach(user => {
+        const tr = document.createElement('tr');
+        headers.forEach(header => {
+            const td = document.createElement('td');
+            if (header === 'Action') {
+                const button = document.createElement('button');
+                const deleted = document.createElement('button');
+                button.textContent = 'Edit'; // Placeholder action
+                deleted.textContent= 'Delete';
+                td.appendChild(button);
+                td.appendChild(deleted);
+                
+            } else {
+                td.textContent = user[header.toLowerCase().replace(' ', '')];
+            }
+            tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+    });
+
+    table.appendChild(tbody);
+    result.appendChild(table);
+     };
+     employeeList.addEventListener("click",(event) =>{
+        event.preventDefault();
+        list();
+      });
+
+  
+    </script>
+  </body>
+</html>

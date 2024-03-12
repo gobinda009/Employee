@@ -1,0 +1,101 @@
+.header1{
+    display:flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #051739;
+    box-shadow: 5px 3px 2px white;
+}
+.main-container{
+   height: 100vh;
+}
+a{
+    text-decoration: none;
+    color: inherit;
+}
+p{
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    cursor: pointer;
+}
+.result{
+    display: flex;
+    height: 90vh;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #282d36;
+    color: white;
+}
+.createEmployee{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.form-group {
+    display: flex;
+    font-weight: bold;
+    margin-bottom: 5px;
+    justify-content: space-around;
+  }
+
+  input {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #fdfcfc;
+    border-radius: 3px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  #search{
+    width: 100%;
+    height: 3px;
+    border: 1px solid #fdfcfc;
+    border-radius: 3px;
+    border: none;
+  }
+table {
+        width: 80%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #422c2c;
+    }
+    .action-buttons button {
+        margin-right: 5px;
+    }
+  .submit-btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #472dbb;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .details{
+    width: 90%;
+    display: flex;
+    justify-content: space-around;
+    font-weight: bold;
+    padding: 10px;
+  }
+ .group{
+  display: flex;
+    font-weight: bold;
+    justify-content: space-around;
+ }
+  .submit-btn:hover {
+    background-color: #4565a0;
+  }

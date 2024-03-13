@@ -9,7 +9,7 @@
   <body>
     <div class="main-container">
       <div class="header1">
-        <p>Home</p>
+        <p><a href="#">Home</a></p>
         <p class="list">Employee List</p>
         <p><%= empName %></p>
         <p><a class="link" href="/">Logout</a></p>
@@ -79,15 +79,39 @@
         event.preventDefault();
         created();
       });
-    async function list(){
-        result.innerHTML = "";
-        const response = await fetch("http://localhost:5000/employees");
-        const users = await response.json();
-        const table = document.createElement('table');
-        const thead = document.createElement('thead');
-        const tbody = document.createElement('tbody');
-        var count = Object.keys(users).length;
 
+     employeeList.addEventListener("click",(event) =>{
+        event.preventDefault();
+        displaySearchResults();
+      });
+
+
+
+const displaySearchResults = async (value = "") => {
+
+  const response = await fetch("http://localhost:5000/employees");
+        const users = await response.json();
+        let filteredList;
+        if(value==""){
+          filteredList=[...users];
+          console.log("first");
+        }else{
+     filteredList = users.filter((e) => {
+        
+         console.log(e.name.indexOf(value));
+        if (e.name.indexOf(value) != -1) {
+            return true;
+        }
+        if (e.name.toLowerCase().indexOf(value) != -1) {
+            return true;
+        }
+        
+       
+    });
+  }
+
+    result.innerHTML = "";
+        var count = Object.keys(users).length;
         const details = document.createElement("div");
         details.classList.add("details");
         details.innerHTML= `
@@ -100,47 +124,90 @@
         <button onclick="created()"">Create Employee</button>
         `
         result.appendChild(details);
-        const headers = ['_ID', 'Name', 'Email', 'Phone', 'Designation', 'Gender', 'Course', 'Action'];
-    const headerRow = document.createElement('tr');
-    headers.forEach(headerText => {
-        const th = document.createElement('th');
-        th.textContent = headerText;
-        headerRow.appendChild(th);
-    });
     
-    thead.appendChild(headerRow);
-    table.appendChild(thead);
+    const table = document.createElement('table');
+        const thead = document.createElement('thead');
+        const tbody = document.createElement('tbody');
+        thead.innerHTML=`
+        <tr>
+          <td>ID</td>
+          <td>NAME</td>
+          <td>EMAIL</td>
+          <td>PHONE NO</td>
+          <td>DESIGNATION</td>
+          <td>COURSE</td>
+          <td>CREATED AT</td>
+          <td>ACTION</>
+        </tr>
+        `;
 
-    // Create table rows and cells
-    users.forEach(user => {
-        const tr = document.createElement('tr');
-        headers.forEach(header => {
-            const td = document.createElement('td');
-            if (header === 'Action') {
-                const button = document.createElement('button');
-                const deleted = document.createElement('button');
-                button.textContent = 'Edit'; // Placeholder action
-                deleted.textContent= 'Delete';
-                td.appendChild(button);
-                td.appendChild(deleted);
-                
-            } else {
-                td.textContent = user[header.toLowerCase().replace(' ', '')];
-            }
-            tr.appendChild(td);
-        });
-        tbody.appendChild(tr);
-    });
+        filteredList.forEach((e) => {
 
-    table.appendChild(tbody);
-    result.appendChild(table);
-     };
-     employeeList.addEventListener("click",(event) =>{
-        event.preventDefault();
-        list();
-      });
+// Dynamic creation:
+const new_row = document.createElement("tr");
+const id = document.createElement("td");
+const name = document.createElement("td");
+const email = document.createElement("td");
+const phone = document.createElement("td");
+const designation = document.createElement("td");
+const course = document.createElement("td");
+const createdAt = document.createElement("td");
+const action = document.createElement("td");
+
+
+
+// Insert data in the dynamically created element
+id.innerText = e._id;
+name.innerText = e.name;
+email.innerText = e.email;
+phone.innerText = e.phone;
+designation.innerText = e.designation;
+course.innerText = e.course;
+createdAt.innerText = e.createdAt;
+action.innerHTML=`
+<button>Edit</button>
+<button onclick="deleteRow(${e.email}">Delete</button>
+`
+
+
+// Append the new elements to the row:
+
+new_row.appendChild(id);
+new_row.appendChild(name);
+new_row.appendChild(email);
+new_row.appendChild(phone);
+new_row.appendChild(designation);
+new_row.appendChild(course);
+new_row.appendChild(createdAt);
+new_row.appendChild(action);
+
+tbody.appendChild(new_row);
+});
+table.appendChild(thead);
+table.appendChild(tbody);
+result.appendChild(table);
+   searchBar =document.getElementById("search");
+   filterList();
+  };
+  let searchBar;
+
+  function filterList(){
+    searchBar.addEventListener("input", (e) => {
+    e.preventDefault(); // prevent the default action.
+
+    const value = searchBar.value;
+    console.log(value);
+
+    displaySearchResults(value);
+})
+  }
+
+  async function deleteRow(deleteData){
+    const deletedRow = await fetch(`http://localhost:5000/employees/${deleteData}`);
+  }
 
   
+
     </script>
   </body>
 </html>

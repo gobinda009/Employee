@@ -19,6 +19,12 @@ p{
     font-size: 20px;
     cursor: pointer;
 }
+p:hover > p{
+  color: rgb(6, 6, 6);
+  transition: 0.5s;
+  background-color: #fdfcfc;
+}
+
 .result{
     display: flex;
     height: 90vh;
@@ -29,15 +35,19 @@ p{
     color: white;
 }
 .createEmployee{
-    height: 100%;
+    padding: 20px;
     display: flex;
     flex-direction: column;
+    border: 1px solid white;
 }
 .form-group {
     display: flex;
     font-weight: bold;
     margin-bottom: 5px;
     justify-content: space-around;
+    padding: 5px;
+    
+    
   }
 
   input {
@@ -45,7 +55,8 @@ p{
     padding: 8px;
     font-size: 16px;
     border: 1px solid #fdfcfc;
-    border-radius: 3px;
+    color: black;
+    
   }
   
   .form-group {

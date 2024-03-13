@@ -99,6 +99,14 @@ app.post("/employee", async (req, res) => {
 
 
 });
+app.delete('/employee/:email',async (req,res) =>{
+    const emailId = req.param.email;
+    try{
+        const deletedEmail = await employee.findOneAndDelete(emailId);
+    }catch(err){
+        console.log(err);
+    }
+});
 
 // Define Port for Application
 const port = 5000;
